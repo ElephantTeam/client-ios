@@ -17,7 +17,7 @@ struct Challenges: Decodable, CustomStringConvertible {
     let challenges: [Challenge]
 }
 
-struct Challenge: Decodable, CustomStringConvertible {
+struct Challenge: Decodable, Hashable, CustomStringConvertible {
     let name: String
 
     var description: String {
@@ -25,9 +25,9 @@ struct Challenge: Decodable, CustomStringConvertible {
     }
 }
 
-final class PuchCheckService {
+final class PushCheckService {
 
-    static let shared = PuchCheckService()
+    static let shared = PushCheckService()
 
     var subject = PassthroughSubject<Challenges, Never>()
 
@@ -38,7 +38,7 @@ final class PuchCheckService {
     init() {
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            let request = URLRequest(url: URL(string: "http://www.mocky.io/v2/5ece46f33000002a00ea0fe2")!)
+            let request = URLRequest(url: URL(string: "https://www.mocky.io/v2/5ece46f33000002a00ea0fe2")!)
             let future: Future<Challenges, Error> = self.webService.load(request: request)
 
             self.cancelable = future.sink(receiveCompletion: { completion in
