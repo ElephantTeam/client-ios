@@ -45,7 +45,7 @@ struct HomeView: View {
                     }
                 } else {
                     VStack {
-                        ActivityIndicator(isAnimating: .constant(true), style: .large)
+                        ActivityIndicator(isAnimating: .constant(true), style: .large, color: .gray)
                         Text("Loading...")
                     }
                 }
@@ -63,9 +63,12 @@ struct HomeView_Previews: PreviewProvider {
 struct ActivityIndicator: UIViewRepresentable {
     @Binding var isAnimating: Bool
     let style: UIActivityIndicatorView.Style
+    let color: UIColor
 
     func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
+        let view = UIActivityIndicatorView(style: style)
+        view.color = color
+        return view
     }
 
     func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {

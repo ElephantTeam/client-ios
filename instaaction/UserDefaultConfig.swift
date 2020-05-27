@@ -14,7 +14,7 @@ struct UserDefaultsConfig {
 }
 
 @propertyWrapper
-struct UserDefault<T> {
+struct UserDefault<T: Codable> {
     let key: String
     let defaultValue: T
 
@@ -25,10 +25,14 @@ struct UserDefault<T> {
 
     var wrappedValue: T {
         get {
-            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+            guard let data = UserDefaults.standard.data(forKey: key) else {
+                return defaultValue
+            }
+            return (try? JSONDecoder().decode(T.self, from: data)) ?? defaultValue
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: key)
+            let data = try! JSONEncoder().encode(newValue)
+            UserDefaults.standard.set(data, forKey: key)
         }
     }
 }

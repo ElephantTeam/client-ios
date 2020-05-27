@@ -51,7 +51,7 @@ class RootCoordinator {
     let window: UIWindow
     
     var didSeeOnboarding: Bool {
-        UserDefaultsConfig.userName != nil
+        UserDefaultsConfig.user != nil
     }
     
     init(window: UIWindow) {

@@ -11,7 +11,7 @@ import Combine
 
 final class WebService {
     enum WebServiceError: Error {
-        case cannotParse
+        case cannotParse(Error)
         case noData
     }
 
@@ -38,7 +38,7 @@ final class WebService {
                     }
                 } catch {
                     DispatchQueue.main.async {
-                        completion(.failure(WebServiceError.cannotParse))
+                        completion(.failure(WebServiceError.cannotParse(error)))
                     }
                 }
             }

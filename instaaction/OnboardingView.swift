@@ -10,27 +10,37 @@ import Foundation
 import SwiftUI
 import Combine
 
-class OnboardingViewModel {
+class OnboardingViewModel: ObservableObject {
+    
+    @Published var isLoading: Bool = false
+    @Published var didFail: Bool = false
+    
     var didSaveName: () -> Void = {}
     var cancelable: AnyCancellable?
     func send(name: String) {
         let user = User(name: name)
 
         guard let request = try? URLRequest.makeRegisterRequest(with: user) else {
-            // TODO handle error
+            didFail = true
             return
         }
-
-        let future: Future<String, Error> = WebService.load(request: request)
-        cancelable = future.sink(receiveCompletion: { completion in
+        
+        struct UserResponse: Decodable {}
+        
+        didFail = false
+        isLoading = true
+        let future: Future<UserResponse, Error> = WebService.load(request: request)
+        cancelable = future.sink(receiveCompletion: { [weak self] completion in
+            self?.isLoading = false
             switch completion {
-            case .failure:
-                // TODO handle error
+            case .failure(let error):
+                debugPrint(error)
+                self?.didFail = true
                 return
             case .finished:
                 return
             }
-        }, receiveValue: { [weak self] value in
+        }, receiveValue: { [weak self] _ in
             UserDefaultsConfig.user = user
             self?.didSaveName()
         })
@@ -49,7 +59,7 @@ extension URLRequest {
     }
 }
 
-struct User: Encodable {
+struct User: Codable {
     let uuid = UUID.init()
     let name: String
     let token: String = {
@@ -67,7 +77,7 @@ extension String {
 struct RegisterResponse: Decodable { }
 
 struct OnboardingView: View {
-    let viewModel: OnboardingViewModel
+    @ObservedObject var viewModel: OnboardingViewModel
     
     @State private var name: String = ""
     
@@ -85,11 +95,16 @@ struct OnboardingView: View {
                 self.viewModel.send(name: self.name)
             }, label: {
                 HStack {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .font(.title)
+                    if !viewModel.isLoading {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .font(.title)
+                    } else {
+                        ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium, color: .white)
+                    }
                     Text("Confirm")
                         .fontWeight(.semibold)
                         .font(.title)
+                        .padding(.leading, 8)
                 }
                 .frame(minWidth: 0, maxWidth: 200)
                 .padding()
@@ -97,6 +112,9 @@ struct OnboardingView: View {
                 .background(LinearGradient(gradient: Gradient(colors: [.init(.magenta), .purple]), startPoint: .leading, endPoint: .trailing))
                 .cornerRadius(16)
                 .padding(32)
+                .alert(isPresented: $viewModel.didFail) {
+                    Alert(title: Text("Error"), message: Text("An error occurred when registering a new user, try again later."), dismissButton: .default(Text("OK")))
+                }
             }).disabled(name.isEmpty)
         }
     }
