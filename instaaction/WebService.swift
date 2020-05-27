@@ -15,23 +15,31 @@ final class WebService {
         case noData
     }
 
-    func load<A: Decodable>(request: URLRequest) -> Future<A, Error> {
+    static func load<A: Decodable>(request: URLRequest) -> Future<A, Error> {
         return Future { completion in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let err = error {
-                    completion(.failure(err))
+                    DispatchQueue.main.async {
+                        completion(.failure(err))
+                    }
                     return
                 }
                 guard let data = data else {
-                    completion(.failure(WebServiceError.noData))
+                    DispatchQueue.main.async {
+                        completion(.failure(WebServiceError.noData))
+                    }
                     return
                 }
                 do {
                     let parsed = try JSONDecoder().decode(A.self, from: data)
                     print("Parsed: \(parsed)")
-                    completion(.success(parsed))
+                    DispatchQueue.main.async {
+                        completion(.success(parsed))
+                    }
                 } catch {
-                    completion(.failure(WebServiceError.cannotParse))
+                    DispatchQueue.main.async {
+                        completion(.failure(WebServiceError.cannotParse))
+                    }
                 }
             }
             task.resume()

@@ -35,14 +35,13 @@ final class PushCheckService {
     var subject = PassthroughSubject<Challenges, Never>()
 
     private var timer: Timer?
-    private let webService = WebService()
     private var cancelable: AnyCancellable?
 
     init() {
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             let request = URLRequest(url: URL(string: "https://www.mocky.io/v2/5ece46f33000002a00ea0fe2")!)
-            let future: Future<Challenges, Error> = self.webService.load(request: request)
+            let future: Future<Challenges, Error> = WebService.load(request: request)
 
             self.cancelable = future.sink(receiveCompletion: { completion in
                 switch completion {
