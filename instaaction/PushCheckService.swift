@@ -32,7 +32,7 @@ final class PushCheckService {
 
     static let shared = PushCheckService()
 
-    var subject = PassthroughSubject<Challenges, Never>()
+    var subject = CurrentValueSubject<Challenges, Never>(Challenges(challenges: []))
 
     private var timer: Timer?
     private var cancelable: AnyCancellable?

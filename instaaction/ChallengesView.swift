@@ -22,7 +22,7 @@ final class ChallengesStore: ObservableObject {
     }
 }
 
-struct ChallengeView: View {
+struct ChallengesView: View {
     @ObservedObject var challengesStore = ChallengesStore()
     var body: some View {
         NavigationView {
@@ -31,7 +31,9 @@ struct ChallengeView: View {
                     List {
                         ForEach(challengesStore.challenges) { challenge in
                             HStack {
-                                Text(challenge.name)
+                                NavigationLink(destination: ChallengeView(challange: challenge)) {
+                                    Text(challenge.name)
+                                }
                             }
                         }
                     }
@@ -45,8 +47,8 @@ struct ChallengeView: View {
     }
 }
 
-struct ChallengeView_Previews: PreviewProvider {
+struct ChallengesView_Previews: PreviewProvider {
     static var previews: some View {
-        ChallengeView()
+        ChallengesView()
     }
 }

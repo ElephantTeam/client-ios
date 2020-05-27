@@ -21,7 +21,7 @@ struct AppView: View {
                     Text("Leader board")
                 }
 
-            ChallengeView()
+            ChallengesView()
                 .tabItem {
                     Image(systemName: "bell.fill")
                     Text("Challenges")

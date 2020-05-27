@@ -48,7 +48,7 @@ final class GameEngine {
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
 
-        let request = UNNotificationRequest(identifier: "identifier",
+        let request = UNNotificationRequest(identifier: String(challange.id),
                                             content: content,
                                             trigger: trigger)
         UNUserNotificationCenter.current().add(request) { error in
