@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92AC5915247E51B900BB30E8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AC5914247E51B900BB30E8 /* OnboardingView.swift */; };
 		B8F706D8247E43960068A802 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F706D7247E43960068A802 /* AppDelegate.swift */; };
 		B8F706DA247E43960068A802 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F706D9247E43960068A802 /* SceneDelegate.swift */; };
 		B8F706DC247E43960068A802 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F706DB247E43960068A802 /* ContentView.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		92AC5914247E51B900BB30E8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B8F706D4247E43960068A802 /* instaaction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = instaaction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F706D7247E43960068A802 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B8F706D9247E43960068A802 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				B8F706E2247E43990068A802 /* LaunchScreen.storyboard */,
 				B8F706E5247E43990068A802 /* Info.plist */,
 				B8F706DF247E43990068A802 /* Preview Content */,
+				92AC5914247E51B900BB30E8 /* OnboardingView.swift */,
 			);
 			path = instaaction;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8F706D8247E43960068A802 /* AppDelegate.swift in Sources */,
+				92AC5915247E51B900BB30E8 /* OnboardingView.swift in Sources */,
 				B8F706DA247E43960068A802 /* SceneDelegate.swift in Sources */,
 				B8F706DC247E43960068A802 /* ContentView.swift in Sources */,
 			);
