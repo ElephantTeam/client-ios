@@ -43,7 +43,7 @@ class RootCoordinator {
             }
             window.rootViewController = UIHostingController(rootView: OnboardingView(viewModel: viewModel))
         } else {
-            window.rootViewController = UIHostingController(rootView: ContentView())
+            window.rootViewController = UIHostingController(rootView: HomeView(homeStore: HomeStore()))
         }
     }
 }
