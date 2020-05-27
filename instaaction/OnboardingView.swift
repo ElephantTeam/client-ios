@@ -10,15 +10,21 @@ import Foundation
 import SwiftUI
 
 class OnboardingViewModel {
+    var didSendName: () -> Void = {}
     func send(name: String) {
         print("Name: \(name)")
+        didSendName()
     }
 }
 
 struct OnboardingView: View {
-    let viewModel = OnboardingViewModel()
+    let viewModel: OnboardingViewModel
     
     @State private var name: String = ""
+    
+    init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         VStack {
@@ -49,7 +55,7 @@ struct OnboardingView: View {
 
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingView()
+        OnboardingView(viewModel: OnboardingViewModel())
     }
 }
 
