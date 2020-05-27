@@ -10,10 +10,10 @@ import Foundation
 import SwiftUI
 
 class OnboardingViewModel {
-    var didSendName: () -> Void = {}
+    var didSaveName: () -> Void = {}
     func send(name: String) {
-        print("Name: \(name)")
-        didSendName()
+        UserDefaultsConfig.userName = name
+        didSaveName()
     }
 }
 

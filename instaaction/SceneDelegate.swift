@@ -26,13 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 class RootCoordinator {
     let window: UIWindow
+    
     var didSeeOnboarding: Bool {
-        get {
-            UserDefaults.standard.bool(forKey: "didSeeOnboarding")
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "didSeeOnboarding")
-        }
+        UserDefaultsConfig.userName != nil
     }
     
     init(window: UIWindow) {
@@ -42,8 +38,7 @@ class RootCoordinator {
     func updateRootViewController() {
         if !didSeeOnboarding {
             let viewModel = OnboardingViewModel()
-            viewModel.didSendName = { [weak self] in
-                self?.didSeeOnboarding = true
+            viewModel.didSaveName = { [weak self] in
                 self?.updateRootViewController()
             }
             window.rootViewController = UIHostingController(rootView: OnboardingView(viewModel: viewModel))
