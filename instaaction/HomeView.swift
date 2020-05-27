@@ -10,20 +10,16 @@ import SwiftUI
 import Combine
 
 class HomeStore: ObservableObject {
-    @Published var scores: [Score] = []
+    @Published var scores: [Score]?
+    private var cancellables: Set<AnyCancellable> = []
     
     func start() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.scores = [
-                Score(id: UUID(), userName: "Andrzej", points: 130),
-                Score(id: UUID(), userName: "Rafał", points: 130),
-                Score(id: UUID(), userName: "Krzyszof", points: 130),
-                Score(id: UUID(), userName: "Władysław", points: 130),
-                Score(id: UUID(), userName: "Szymon", points: 130),
-                Score(id: UUID(), userName: "Robert", points: 130),
-                Score(id: UUID(), userName: "Stanisław", points: 130)
-            ]
-        }
+        let request = URLRequest(url: URL(string: "https://desolate-spire-68065.herokuapp.com/leaderbord")!)
+        WebService.load(request: request)
+            .print()
+            .replaceError(with: [])
+            .assign(to: \.scores, on: self)
+        .store(in: &cancellables)
     }
 }
 
@@ -32,15 +28,19 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if !homeStore.scores.isEmpty {
-                    List {
-                        ForEach(homeStore.scores) { score in
-                            HStack {
-                                Text(score.userName)
-                                Spacer()
-                                Text("\(score.points)")
+                if homeStore.scores != nil {
+                    if homeStore.scores!.isEmpty {
+                        Text("Error occurred.")
+                    } else {
+                        List {
+                            ForEach(homeStore.scores!) { score in
+                                HStack {
+                                    Text(score.userName)
+                                    Spacer()
+                                    Text("\(score.points)")
+                                }
+                                .padding(.vertical, 16)
                             }
-                            .padding(.vertical, 16)
                         }
                     }
                 } else {
