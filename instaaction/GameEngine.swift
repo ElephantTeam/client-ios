@@ -29,7 +29,11 @@ final class GameEngine {
         })
 
         cancelable = PushCheckService.shared.subject.sink { [weak self] value in
-            // TODO Handle
+            value.challenges.forEach { challenge in
+                guard let self = self, !self.activeChallenges.contains(challenge) else { return }
+                self.activeChallenges.insert(challenge)
+                self.scheduleNotification(for: challenge)
+            }
         }
     }
 
