@@ -8,14 +8,63 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class OnboardingViewModel {
     var didSaveName: () -> Void = {}
+    var cancelable: AnyCancellable?
     func send(name: String) {
-        UserDefaultsConfig.userName = name
-        didSaveName()
+        let user = User(name: name)
+
+        guard let request = try? URLRequest.makeRegisterRequest(with: user) else {
+            // TODO handle error
+            return
+        }
+
+        let future: Future<String, Error> = WebService.load(request: request)
+        cancelable = future.sink(receiveCompletion: { completion in
+            switch completion {
+            case .failure:
+                // TODO handle error
+                return
+            case .finished:
+                return
+            }
+        }, receiveValue: { [weak self] value in
+            UserDefaultsConfig.user = user
+            self?.didSaveName()
+        })
+
     }
 }
+
+extension URLRequest {
+    static func makeRegisterRequest(with user: User) throws -> URLRequest {
+        var request = URLRequest(url: URL(string: "https://desolate-spire-68065.herokuapp.com/register")!)
+        request.httpMethod = "POST"
+        request.httpBody = try JSONEncoder().encode(user)
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        return request
+    }
+}
+
+struct User: Encodable {
+    let uuid = UUID.init()
+    let name: String
+    let token: String = {
+        return "ios-" + String.randomString(length: 20)
+    }()
+}
+
+extension String {
+    static func randomString(length: Int) -> String {
+      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+      return String((0..<length).map{ _ in letters.randomElement()! })
+    }
+}
+
+struct RegisterResponse: Decodable { }
 
 struct OnboardingView: View {
     let viewModel: OnboardingViewModel

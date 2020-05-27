@@ -9,8 +9,8 @@
 import Foundation
 
 struct UserDefaultsConfig {
-    @UserDefault("username", defaultValue: nil)
-    static var userName: String?
+    @UserDefault("user", defaultValue: nil)
+    static var user: User?
 }
 
 @propertyWrapper
