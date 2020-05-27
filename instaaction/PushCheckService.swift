@@ -17,7 +17,10 @@ struct Challenges: Decodable, CustomStringConvertible {
     let challenges: [Challenge]
 }
 
-struct Challenge: Decodable, Hashable, CustomStringConvertible {
+struct Challenge: Decodable, Hashable, CustomStringConvertible, Identifiable {
+    var id: Int {
+        name.hashValue
+    }
     let name: String
 
     var description: String {
