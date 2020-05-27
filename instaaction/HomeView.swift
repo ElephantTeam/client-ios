@@ -14,7 +14,7 @@ class HomeStore: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     
     func start() {
-        let request = URLRequest(url: URL(string: "https://desolate-spire-68065.herokuapp.com/leaderbord")!)
+        let request = URLRequest(url: URL(string: "https://desolate-spire-68065.herokuapp.com/leaderboard")!)
         WebService.load(request: request)
             .print()
             .replaceError(with: [])

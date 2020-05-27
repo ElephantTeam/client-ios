@@ -18,12 +18,4 @@ struct Score: Identifiable, Decodable {
         case userName = "name"
         case points = "score"
     }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let idString = try container.decode(String.self, forKey: .id)
-        id = UUID(uuidString: idString) ?? UUID()
-        userName = try container.decode(String.self, forKey: .userName)
-        points = try container.decode(Int.self, forKey: .points)
-    }
 }
